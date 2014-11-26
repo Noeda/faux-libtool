@@ -7,7 +7,7 @@ maintainer:          mikjuo@gmail.com
 build-type:          Simple
 cabal-version:       >=1.10
 
-executable faux-libtool
+executable libtool
   main-is:             Main.hs
   ghc-options:         -Wall
   build-depends:       base >=4.7 && <4.8
