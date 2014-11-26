@@ -9,7 +9,6 @@ import Data.Foldable
 import Control.Applicative
 import Control.Monad
 import Control.Exception
-import Control.Concurrent
 import Control.Monad.Trans.Writer.Strict
 import Control.Monad.IO.Class
 import System.Posix.Files
@@ -66,7 +65,6 @@ collectInFiles tmp_dir_name wtd = do
                 Nothing -> error $ "Cannot find " <> lib
                 Just (Left (raw_listing, lib)) -> do
                     _ <- liftIO $ readProcess "ar" ["x", lib] ""
-                    let object_files = lines raw_listing
                     tell $ fmap (\x -> tmp_dir_name <> "/" <> x) $
                         lines raw_listing
                 Just (Right ob_name) -> tell [ob_name]
@@ -88,7 +86,7 @@ collectInFiles tmp_dir_name wtd = do
 
 processArgs :: [String] -> WhatToDo -> WhatToDo
 processArgs ("-static":rest) accum = processArgs' rest accum
-processArgs _ accum = error "Expected '-static' as first argument."
+processArgs _ _ = error "Expected '-static' as first argument."
 
 processArgs' :: [String] -> WhatToDo -> WhatToDo
 processArgs' [] accum = accum
